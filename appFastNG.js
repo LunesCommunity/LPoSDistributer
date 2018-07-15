@@ -4,31 +4,31 @@ var LineReaderSync = require("line-reader-sync")
 var fs = require('fs');
 
 /**
- * Put your settings here: FOR LUNES not set  MRT yet
+ * Put your settings here: FOR LUNES not set  ZEN yet
  *     - address: the address of your node that you want to distribute from
  *     - alias: the alias of the node address
  *     - startBlockHeight: the block from which you want to start distribution for
  *     - endBlock: the block until you want to distribute the earnings
- *     - distributableMRTPerBlock: amount of MRT distributed per forged block
+ *     - distributableZENPerBlock: amount of ZEN distributed per forged block
  *     - filename: file to which the payments for the mass payment tool are written
  *     - node: address of your node in the form http://<ip>:<port>
  *     - percentageOfFeesToDistribute: the percentage of Waves fees that you want to distribute
  *     - blockStorage: file for storing block history
  */
 var config = {
-    address: '37nX3hdCt1GWeSsAMNFmWgbQWZZhbvBG3mX',
-    alias: 'lunesfullnode.com',
-    startBlockHeight: 0,
-    endBlock: 28606,
-    distributableWfnPerBlock: 0,
-    filename: 'test.json',
-    node: 'http://localhost:5555',
-    percentageOfFeesToDistribute: 100,
+    address: '37mCm11kpfQWiYaJuPJJG65PhgyhCQtqLxL',
+    alias: 'lunes.in',
+    startBlockHeight: 47129,
+    endBlock: 56824,
+    distributableZenPerBlock: 5000000,
+    filename: 'payout003.json',
+    node: 'https://api.lunes.in',
+    percentageOfFeesToDistribute: 500,
     blockStorage: 'blocks.json'
 };
 
 var payments = [];
-var mrt = [];
+var zen = [];
 var myLeases = {};
 var myCanceledLeases = {};
 var myForgedBlocks = [];
@@ -193,7 +193,7 @@ var getAllBlocks = function() {
 };
 
 /**
- * This method distributes either Waves fees and MRT to the active leasers for
+ * This method distributes either Waves fees and ZEN to the active leasers for
  * the given block.
  *
  * @param activeLeases active leases for the block in question
@@ -212,14 +212,14 @@ var distribute = function(activeLeases, amountTotalLeased, block, previousBlock)
     for (var address in activeLeases) {
         var share = (activeLeases[address] / amountTotalLeased)
         var amount = fee * share;
-        var amountMRT = share * config.distributableMrtPerBlock;
+        var amountZEN = share * config.distributableZenPerBlock;
 
         if (payments[address]) {
             payments[address] += amount * (config.percentageOfFeesToDistribute / 100);
-            mrt[address] += amountMRT;
+            zen[address] += amountZEN;
         } else {
             payments[address] = amount * (config.percentageOfFeesToDistribute / 100);
-            mrt[address] = amountMRT;
+            zen[address] = amountZEN;
         }
     }
 };
@@ -238,17 +238,17 @@ var pay = function() {
                 "amount": Number(Math.round(payments[address])),
                 "fee": 100000,
                 "sender": config.address,
-                "attachment": "",
+/*                "attachment": "", */
                 "recipient": address
             });
         }
-        if (mrt[address] > 0) {
+        if (zen[address] > 0) {
             transactions.push({
-                "amount": Number(Math.round(mrt[address] * Math.pow(10, 2))),
+                "amount": Number(Math.round(zen[address] * Math.pow(10, 2))),
                 "fee": 100000,
-                "assetId": "4uK8i4ThRGbehENwa6MxyLtxAjAo1Rj9fduborGExarC",
+                "assetId": "9rwhz45pXYRdbHTek28HK87RHCEG1BKP4Eu2FnpAVsC8",
                 "sender": config.address,
-                "attachment": "",
+/*                "attachment": "", */
                 "recipient": address
             });
         }

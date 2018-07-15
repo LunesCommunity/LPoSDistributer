@@ -14,14 +14,15 @@ var fs = require('fs');
  *     - excludeList: a list of addresses that should not receive the airdrop, e.g., exchanges...
  */
 var config = {
-    address: '',
-    block: 500859,
-    amountToDistribute: 35000000,
-    assetId: '',
-    assetToDistributeId: '',
-    filename: '',
-    node: '',
-    excludeList: [ ]
+    address: '37mCm11kpfQWiYaJuPJJG65PhgyhCQtqLxL',
+    block: 37000,
+    amountToDistribute: 772134940082802,
+    assetId: '9rwhz45pXYRdbHTek28HK87RHCEG1BKP4Eu2FnpAVsC8',
+    assetToDistributeId: '9rwhz45pXYRdbHTek28HK87RHCEG1BKP4Eu2FnpAVsC8',
+    filename: 'teste.json',
+    node: 'https://api.lunes.in',
+    excludeList: ['37mCm11kpfQWiYaJuPJJG65PhgyhCQtqLxL',
+                  '385ym4fLDXnnNmkRt4SCyFp9dn8aGLWBT43']
 };
 
 var total = 0;
@@ -44,7 +45,7 @@ var start = function() {
             }
         }).getBody());
     } else {
-        richlist= JSON.parse(syncRequest('GET', config.node + '/debug/stateWaves/' + config.block, {
+        richlist= JSON.parse(syncRequest('GET', config.node + '/debug/stateLunes/' + config.block, {
             'headers': {
                 'Connection': 'keep-alive'
             }
@@ -54,6 +55,7 @@ var start = function() {
     config.excludeList.forEach(function(excludeAddress) {
         richlist[excludeAddress] = 0;
     });
+
     total = checkTotalDistributableAmount(richlist);
     startDistribute(richlist);
 };
@@ -66,9 +68,9 @@ var start = function() {
  */
 var checkTotalDistributableAmount = function(richlist) {
     var total = 0;
+    var leaser = [];
     for (var address in richlist) {
         var amount = richlist[address];
-
         total += amount;
     }
 
@@ -87,9 +89,13 @@ var startDistribute = function(richlist) {
     for (var address in richlist) {
         var amount = richlist[address];
 
-        var percentage = amount / total;
+        
+
+
+        var percentage = amount / total; 
         var amountToSend = Math.floor(config.amountToDistribute * percentage);
 
+        var amountToSend = amount
 
         totalDistributed += Number(amountToSend);
         transactions.push( { address: address, amount: amountToSend });
@@ -111,7 +117,7 @@ var sendToRecipients = function(txList, index) {
         "fee": 100000,
         "assetId": config.assetToDistributeId,
         "sender": config.address,
-        "attachment": "",
+/*        "attachment": "", */
         "recipient": txList[index].address
     };
 
@@ -131,3 +137,4 @@ var sendToRecipients = function(txList, index) {
 };
 
 start();
+

@@ -10,9 +10,9 @@ var request = require('request');
  *      - fee: amount of fee to spend for the tx
  */
 var config = {
-    filename: '<your payments file>',
-    node: 'http://<ip>:<port>',
-    apiKey: 'put the apiKey for the node here',
+    filename: 'payout003.json',
+    node: 'https://api.lunes.in',
+    apiKey: '98zP7uPrPPAefueP6Bm92wTr98AQxnJsBdQjZn7VRy15',
     feeAssetId: null,
     fee: 10000
 };
@@ -66,3 +66,5 @@ var doPayment = function(payments, counter) {
 };
 
 start();
+
+

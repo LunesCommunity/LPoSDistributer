@@ -1,0 +1,9 @@
+config = {
+    address: '37mCm11kpfQWiYaJuPJJG65PhgyhCQtqLxL',
+    alias: 'lunes.in',
+    startBlockHeight: 1,
+    endBlock: 37000,
+    distributableZenPerBlock: 5000000,
+    percentageOfFeesToDistribute: 300,
+};
+
