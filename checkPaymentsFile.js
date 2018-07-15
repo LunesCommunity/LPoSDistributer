@@ -7,8 +7,8 @@ var request = require('request');
  *     - node: address of your node in the form http://<ip>:<port>
  */
 var config = {
-    filename: 'payout003.json',
-    node: 'https://api.lunes.in'
+    filename: 'test.json',
+    node: 'http://localhost:5555'
 };
 
 var payments;
